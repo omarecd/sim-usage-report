@@ -30,7 +30,8 @@ def init_db():
             period_start TEXT,
             period_end TEXT,
             usage_kb INTEGER,
-            FOREIGN KEY (iccid) REFERENCES sims (iccid)
+            FOREIGN KEY (iccid) REFERENCES sims (iccid),
+            UNIQUE (iccid, period_start, period_end)
         )
     """)
 
@@ -55,7 +56,7 @@ def save_usage_record(record):
     conn = get_connection()
     cursor = conn.cursor()
     cursor.execute("""
-        INSERT INTO usage_records (iccid, period_start, period_end, usage_kb)
+        INSERT OR REPLACE INTO usage_records (iccid, period_start, period_end, usage_kb)
         VALUES (?, ?, ?, ?)
     """, (record.iccid, str(record.period_start), str(record.period_end), record.usage_kb))
     conn.commit()
