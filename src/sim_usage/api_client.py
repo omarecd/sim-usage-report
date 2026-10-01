@@ -2,7 +2,7 @@ import requests
 from sim_usage.config import TRUPHONE_API_TOKEN, TRUPHONE_BASE_URL
 
 HEADERS = {
-    "Authorization": f"Bearer {TRUPHONE_API_TOKEN}",
+    "Authorization": f"Token {TRUPHONE_API_TOKEN}",
     "Content-Type": "application/json"
 }
 
