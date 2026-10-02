@@ -11,7 +11,12 @@ def process_sim(iccid: str):
 
     # 1. Get SIM details
     details = get_sim_details(iccid)
-    activation_date = details["dates"]["firstActivationDate"].split("T")[0]
+
+    activation_date_raw = details["dates"]["firstActivationDate"]
+    if not activation_date_raw:
+        print(f"Skipping {iccid}: never activated")
+        return
+    activation_date = activation_date_raw.split("T")[0]
 
     sim = Sim(
         iccid=details["iccid"],
