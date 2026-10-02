@@ -1,5 +1,5 @@
 from datetime import date, datetime
-from sim_usage.api_client import get_sim_details, generate_usage_report, fetch_report_data
+from sim_usage.api_client import get_sim_details, get_all_sims, generate_usage_report, fetch_report_data
 from sim_usage.transform import sum_usage_kb, kb_to_mb, percent_used, remaining_mb
 from sim_usage.models import Sim, UsageRecord
 from sim_usage.database import init_db, save_sim, save_usage_record
@@ -51,4 +51,10 @@ def process_sim(iccid: str):
 
 if __name__ == "__main__":
     init_db()
-    process_sim("8944474400001330935")
+    sims = get_all_sims()
+    print(f"Found {len(sims)} SIMs. Processing each...")
+    for sim in sims:
+        try:
+            process_sim(sim["iccid"])
+        except Exception as e:
+            print(f"Failed on {sim['iccid']}: {e}")
